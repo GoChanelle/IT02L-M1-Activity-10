@@ -661,8 +661,9 @@ else:
         col1, col2, col3 = st.columns(3, border=True)
 
 
+        col1.badge("Largest Transaction",color="red")
         col1.metric(
-            "Largest Transaction",
+            "・・・・・",
             go_bank_utils
             .format_currency(
                 result[
@@ -690,6 +691,7 @@ else:
             ]
         )
 
+        st.divider()
 
         st.caption(
             f"Latest Activity: "
