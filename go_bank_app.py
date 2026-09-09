@@ -130,7 +130,7 @@ if not st.session_state.logged_in:
     with register_tab:
 
         st.subheader(
-            "Create Your go Bank Account"
+            "Create Your Chance Bank Account"
         )
 
         name = st.text_input(
