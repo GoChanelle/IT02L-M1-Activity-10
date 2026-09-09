@@ -211,8 +211,8 @@ else:
         f"**{account.account_name}**"
     )
 
-    st.sidebar.caption(
-        st.badge(account.get_account_type())
+    st.sidebar.badge(
+        account.get_account_type()
     )
 
     st.sidebar.write(
