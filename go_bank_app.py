@@ -270,8 +270,8 @@ else:
         col1, col2, col3 = st.columns(3, border=True)
 
 
+        col1.badge("Current Balance", color="red")
         col1.metric(
-            st.badge("Current Balance"),
             go_bank_utils
             .format_currency(
                 account.check_balance()
