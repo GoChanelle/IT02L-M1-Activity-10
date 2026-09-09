@@ -267,10 +267,10 @@ else:
             "Account Overview"
         )
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3 = st.columns(3, border=True)
 
 
-        col1.metric(
+        col1.markdown(
             "Current Balance",
             go_bank_utils
             .format_currency(
@@ -279,13 +279,13 @@ else:
         )
 
 
-        col2.metric(
+        col2.markdown(
             "Account Type",
             account.get_account_type()
         )
 
 
-        col3.metric(
+        col3.markdown(
             "Account Number",
             account.account_number
         )
