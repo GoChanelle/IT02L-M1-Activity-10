@@ -319,8 +319,8 @@ else:
 
     elif menu == "Deposit":
 
-        st.header(
-            "Deposit Money"
+        st.subheader(
+            ":red[Deposit Money]"
         )
 
         st.divider()
@@ -389,8 +389,8 @@ else:
 
     elif menu == "Withdraw":
 
-        st.header(
-            "Withdraw Money"
+        st.subheader(
+            ":red[Withdraw Money]"
         )
 
         st.write(
@@ -462,8 +462,8 @@ else:
 
     elif menu == "Transaction History":
 
-        st.header(
-            "Transaction History"
+        st.subheader(
+            ":red[Transaction History]"
         )
 
         transactions = (
@@ -543,8 +543,8 @@ else:
 
     elif menu == "Transaction Analysis":
 
-        st.header(
-            "Transaction Analysis"
+        st.subheader(
+            ":red[Transaction Analysis]"
         )
 
         result = (
