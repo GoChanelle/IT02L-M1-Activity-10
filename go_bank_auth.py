@@ -37,6 +37,7 @@ def register_account(
     if account_number == "":
         return None, "Please enter an account number."
 
+    # Verify account number is only numbers
     if not account_number.isdigit():
         return None, "Account number must contain only numbers."
 
