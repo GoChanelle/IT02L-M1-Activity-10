@@ -212,7 +212,7 @@ else:
     )
 
     st.sidebar.badge(
-        account.get_account_type()
+        account.get_account_type(), color="purple"
     )
 
     st.sidebar.write(
