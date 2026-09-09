@@ -331,7 +331,7 @@ else:
         )
 
         amount = st.number_input(
-            "Deposit Amount",
+            "Deposit Amount:",
             min_value=0.0,
             step=100.0,
             format="%.2f"
@@ -348,7 +348,7 @@ else:
             ):
 
                 st.error(
-                    "Invalid deposit amount."
+                    "Invalid deposit amount .ᐟ"
                 )
 
             else:
