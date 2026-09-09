@@ -325,7 +325,7 @@ else:
 
         st.divider()
 
-        st.write(
+        st.badge(
             f"Current Balance: "
             f"**{go_bank_utils.format_currency(account.check_balance())}**"
         )
@@ -371,7 +371,7 @@ else:
                         )
 
                     st.success(
-                        "Deposit successful."
+                        "Deposit successful .ᐟ"
                     )
 
                     st.metric(
