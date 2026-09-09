@@ -276,7 +276,7 @@ else:
             f"𓄲 Welcome, {account.account_name} !"
         )
 
-        st.subheader(
+        st.header(
             ":red[Account Overview]"
         )
 
@@ -319,7 +319,7 @@ else:
 
     elif menu == "Deposit":
 
-        st.subheader(
+        st.header(
             ":red[Deposit Money]"
         )
 
@@ -389,7 +389,7 @@ else:
 
     elif menu == "Withdraw":
 
-        st.subheader(
+        st.header(
             ":red[Withdraw Money]"
         )
 
@@ -462,7 +462,7 @@ else:
 
     elif menu == "Transaction History":
 
-        st.subheader(
+        st.header(
             ":red[Transaction History]"
         )
 
@@ -543,7 +543,7 @@ else:
 
     elif menu == "Transaction Analysis":
 
-        st.subheader(
+        st.header(
             ":red[Transaction Analysis]"
         )
 
@@ -560,7 +560,7 @@ else:
         # TRANSACTION SUMMARY
         # ==================================
 
-        st.subheader(
+        st.header(
             "1. Transaction Summary"
         )
 
@@ -599,7 +599,7 @@ else:
         # MONEY FLOW
         # ==================================
 
-        st.subheader(
+        st.header(
             "2. Money Flow Analysis"
         )
 
@@ -647,7 +647,7 @@ else:
         # ACCOUNT ACTIVITY
         # ==================================
 
-        st.subheader(
+        st.header(
             "3. Account Activity Analysis"
         )
 
