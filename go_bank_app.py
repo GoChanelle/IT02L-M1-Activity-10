@@ -82,12 +82,12 @@ if not st.session_state.logged_in:
             "Welcome Back"
         )
 
-        account_number = st.badge(
+        account_number = st.text_input(
             "Account Number",
             key="login_account"
         )
 
-        pin = st.badge(
+        pin = st.text_input(
             "PIN",
             type="password",
             key="login_pin"
