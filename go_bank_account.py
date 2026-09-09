@@ -32,6 +32,30 @@ class BankAccount(ABC):
 
     def withdraw(self, amount):
 
+        # Abstraction
+        # Asks the account for its own rules through these two
+        # methods and enforces whatever comes back. 
+        withdrawal_limit = self.get_withdrawal_limit()
+ 
+        if (
+            withdrawal_limit is not None
+            and
+            amount > withdrawal_limit
+        ):
+            return False
+ 
+        if amount > self._balance:
+            return False
+ 
+        remaining_balance = self._balance - amount
+ 
+        if remaining_balance < self.get_minimum_balance():
+            return False
+ 
+        self._balance = remaining_balance
+ 
+        return True
+
         if amount <= 0:
             return False
 
