@@ -271,7 +271,7 @@ else:
 
 
         col1.metric(
-            "Current Balance",
+            st.badge("Current Balance"),
             go_bank_utils
             .format_currency(
                 account.check_balance()
