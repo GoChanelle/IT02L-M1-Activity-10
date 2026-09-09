@@ -225,7 +225,11 @@ else:
 
     menu = st.sidebar.segmented_control(
         "BANKING MENU",
-        ["Dashboard", "Deposit", "Withdraw", "Transaction History", "Transaction Analysis"],
+        ["Dashboard", 
+         "Deposit", 
+         "Withdraw", 
+         "Transaction History", 
+         "Transaction Analysis"],
         default="Dashboard"
     )
 
