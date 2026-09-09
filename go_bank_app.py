@@ -256,7 +256,7 @@ else:
 
     if menu == "Dashboard":
 
-        st.header(
+        st.info(
             f"Welcome, {account.account_name}"
         )
 
