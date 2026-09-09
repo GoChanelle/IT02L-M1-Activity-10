@@ -309,6 +309,8 @@ else:
             "Deposit Money"
         )
 
+        st.divider()
+
         st.write(
             f"Current Balance: "
             f"**{go_bank_utils.format_currency(account.check_balance())}**"
