@@ -672,9 +672,9 @@ else:
             )
         )
 
-
+        col2.badge("Average Transaction",color="red")
         col2.metric(
-            "Average Transaction",
+            "・・・・・",
             go_bank_utils
             .format_currency(
                 result[
@@ -683,9 +683,9 @@ else:
             )
         )
 
-
+        col3.badge("Latest Transaction",color="red")
         col3.metric(
-            "Latest Transaction",
+            "・・・・・",
             result[
                 "latest_transaction"
             ]
