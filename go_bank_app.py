@@ -344,17 +344,17 @@ else:
                 )
 
                 if success:
-                    st.spinner(text="In progress...", *, show_time=False, width="content")
+                    with st.spinner(text="In progress...", show_time=False, width="content"):
 
-                    go_bank_storage.update_account(
-                        account
-                    )
+                        go_bank_storage.update_account(
+                            account
+                        )
 
-                    go_bank_transactions.record_transaction(
-                        account,
-                        "Deposit",
-                        amount
-                    )
+                        go_bank_transactions.record_transaction(
+                            account,
+                            "Deposit",
+                            amount
+                        )
 
                     st.success(
                         "Deposit successful."
