@@ -1,4 +1,4 @@
-from balaman_bank_account import (
+from go_bank_account import (
     SavingsAccount,
     StudentAccount
 )

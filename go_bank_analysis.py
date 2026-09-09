@@ -6,7 +6,7 @@ def analyze_transactions(
 ):
 
     transactions = (
-        balaman_bank_transactions
+        go_bank_transactions
         .get_transactions()
     )
 

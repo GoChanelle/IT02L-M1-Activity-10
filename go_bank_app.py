@@ -1,10 +1,10 @@
 import streamlit as st
 
-import balaman_bank_auth
-import balaman_bank_storage
-import balaman_bank_transactions
-import balaman_bank_analysis
-import balaman_bank_utils
+import go_bank_auth
+import go_bank_storage
+import go_bank_transactions
+import go_bank_analysis
+import go_bank_utils
 
 
 # ==========================================
@@ -12,7 +12,7 @@ import balaman_bank_utils
 # ==========================================
 
 st.set_page_config(
-    page_title="balaman Bank",
+    page_title="go Bank",
     page_icon="🏦",
     layout="wide"
 )
@@ -36,7 +36,7 @@ if "account" not in st.session_state:
 # BANK HEADER
 # ==========================================
 
-st.title("balaman BANK")
+st.title("go BANK")
 
 st.caption(
     "Secure Digital Banking System"
@@ -84,7 +84,7 @@ if not st.session_state.logged_in:
         ):
 
             account, message = (
-                balaman_bank_auth
+                go_bank_auth
                 .login_account(
                     account_number,
                     pin
@@ -115,7 +115,7 @@ if not st.session_state.logged_in:
     with register_tab:
 
         st.subheader(
-            "Create Your balaman Bank Account"
+            "Create Your go Bank Account"
         )
 
         name = st.text_input(
@@ -161,7 +161,7 @@ if not st.session_state.logged_in:
         ):
 
             account, message = (
-                balaman_bank_auth
+                go_bank_auth
                 .register_account(
                     name,
                     account_number,
@@ -202,7 +202,7 @@ else:
     # ======================================
 
     st.sidebar.title(
-        "balaman BANK"
+        "go BANK"
     )
 
     st.sidebar.write(
@@ -267,7 +267,7 @@ else:
 
         col1.metric(
             "Current Balance",
-            balaman_bank_utils
+            go_bank_utils
             .format_currency(
                 account.check_balance()
             )
@@ -307,7 +307,7 @@ else:
 
         st.write(
             f"Current Balance: "
-            f"**{balaman_bank_utils.format_currency(account.check_balance())}**"
+            f"**{go_bank_utils.format_currency(account.check_balance())}**"
         )
 
         amount = st.number_input(
@@ -323,7 +323,7 @@ else:
             use_container_width=True
         ):
 
-            if not balaman_bank_utils.is_valid_amount(
+            if not go_bank_utils.is_valid_amount(
                 amount
             ):
 
@@ -339,11 +339,11 @@ else:
 
                 if success:
 
-                    balaman_bank_storage.update_account(
+                    go_bank_storage.update_account(
                         account
                     )
 
-                    balaman_bank_transactions.record_transaction(
+                    go_bank_transactions.record_transaction(
                         account,
                         "Deposit",
                         amount
@@ -355,7 +355,7 @@ else:
 
                     st.metric(
                         "New Balance",
-                        balaman_bank_utils
+                        go_bank_utils
                         .format_currency(
                             account.check_balance()
                         )
@@ -374,7 +374,7 @@ else:
 
         st.write(
             f"Available Balance: "
-            f"**{balaman_bank_utils.format_currency(account.check_balance())}**"
+            f"**{go_bank_utils.format_currency(account.check_balance())}**"
         )
 
         amount = st.number_input(
@@ -390,7 +390,7 @@ else:
             use_container_width=True
         ):
 
-            if not balaman_bank_utils.is_valid_amount(
+            if not go_bank_utils.is_valid_amount(
                 amount
             ):
 
@@ -412,11 +412,11 @@ else:
 
                 if success:
 
-                    balaman_bank_storage.update_account(
+                    go_bank_storage.update_account(
                         account
                     )
 
-                    balaman_bank_transactions.record_transaction(
+                    go_bank_transactions.record_transaction(
                         account,
                         "Withdraw",
                         amount
@@ -428,7 +428,7 @@ else:
 
                     st.metric(
                         "New Balance",
-                        balaman_bank_utils
+                        go_bank_utils
                         .format_currency(
                             account.check_balance()
                         )
@@ -446,7 +446,7 @@ else:
         )
 
         transactions = (
-            balaman_bank_transactions
+            go_bank_transactions
             .get_transactions()
         )
 
@@ -484,7 +484,7 @@ else:
                         ),
 
                     "Amount":
-                        balaman_bank_utils
+                        go_bank_utils
                         .format_currency(
                             transaction.get(
                                 "amount",
@@ -493,7 +493,7 @@ else:
                         ),
 
                     "Balance After":
-                        balaman_bank_utils
+                        go_bank_utils
                         .format_currency(
                             transaction.get(
                                 "balance_after",
@@ -527,7 +527,7 @@ else:
         )
 
         result = (
-            balaman_bank_analysis
+            go_bank_analysis
             .analyze_transactions(
                 account.account_number
             )
@@ -587,7 +587,7 @@ else:
 
         col1.metric(
             "Total Deposited",
-            balaman_bank_utils
+            go_bank_utils
             .format_currency(
                 result[
                     "total_deposited"
@@ -598,7 +598,7 @@ else:
 
         col2.metric(
             "Total Withdrawn",
-            balaman_bank_utils
+            go_bank_utils
             .format_currency(
                 result[
                     "total_withdrawn"
@@ -609,7 +609,7 @@ else:
 
         col3.metric(
             "Net Cash Flow",
-            balaman_bank_utils
+            go_bank_utils
             .format_currency(
                 result[
                     "net_cash_flow"
@@ -635,7 +635,7 @@ else:
 
         col1.metric(
             "Largest Transaction",
-            balaman_bank_utils
+            go_bank_utils
             .format_currency(
                 result[
                     "largest_transaction"
@@ -646,7 +646,7 @@ else:
 
         col2.metric(
             "Average Transaction",
-            balaman_bank_utils
+            go_bank_utils
             .format_currency(
                 result[
                     "average_transaction"
