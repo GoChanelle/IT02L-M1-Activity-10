@@ -344,6 +344,7 @@ else:
                 )
 
                 if success:
+                    st.spinner(text="In progress...", *, show_time=False, width="content")
 
                     go_bank_storage.update_account(
                         account
