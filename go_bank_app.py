@@ -217,7 +217,7 @@ else:
     )
 
     st.sidebar.badge(
-        account.get_account_type(), color="violet"
+        account.get_account_type(), color="red"
     )
 
     st.sidebar.divider()
