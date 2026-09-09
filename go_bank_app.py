@@ -469,6 +469,8 @@ else:
             ":red[Transaction History]"
         )
 
+        st.divider()
+
         transactions = (
             go_bank_transactions
             .get_transactions()
@@ -550,6 +552,8 @@ else:
             ":red[Transaction Analysis]"
         )
 
+        st.divider()
+
         result = (
             go_bank_analysis
             .analyze_transactions(
@@ -567,7 +571,7 @@ else:
             "1. Transaction Summary"
         )
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3 = st.columns(3, border=True)
 
 
         col1.metric(
