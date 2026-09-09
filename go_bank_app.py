@@ -36,7 +36,7 @@ if "account" not in st.session_state:
 # BANK HEADER
 # ==========================================
 
-st.image("https://i.pinimg.com/736x/ab/da/ac/abdaacafa447a787d4f887f448daa325.jpg")
+st.image("https://i.pinimg.com/1200x/99/82/90/998290c88932dc9e9a3b115e5c1b48ae.jpg", width="stretch")
 
 st.title("𖥻 ׁ ׅ  CHANCE BANK ᯓ★")
 
