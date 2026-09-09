@@ -358,7 +358,7 @@ else:
                 )
 
                 if success:
-                    with st.spinner(text="In progress...", show_time=False, width="content"):
+                    with st.spinner(text="Transferring amount...", show_time=False, width="content"):
 
                         go_bank_storage.update_account(
                             account
@@ -418,13 +418,13 @@ else:
             ):
 
                 st.error(
-                    "Invalid withdrawal amount."
+                    "Invalid withdrawal amount .ᐟ"
                 )
 
             elif amount > account.check_balance():
 
                 st.error(
-                    "Insufficient balance."
+                    "Insufficient balance .ᐟ"
                 )
 
             else:
@@ -435,18 +435,19 @@ else:
 
                 if success:
 
-                    go_bank_storage.update_account(
-                        account
-                    )
+                    with st.spinner(text="Transferring amount...", show_time=False, width="content"):
+                        go_bank_storage.update_account(
+                            account
+                        )
 
-                    go_bank_transactions.record_transaction(
-                        account,
-                        "Withdraw",
-                        amount
-                    )
+                        go_bank_transactions.record_transaction(
+                            account,
+                            "Withdraw",
+                            amount
+                        )
 
                     st.success(
-                        "Withdrawal successful."
+                        "Withdrawal successful .ᐟ"
                     )
 
                     st.metric(
