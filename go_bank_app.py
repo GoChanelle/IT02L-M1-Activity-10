@@ -272,6 +272,7 @@ else:
 
         col1.badge("Current Balance", color="red")
         col1.metric(
+            "Balance",
             go_bank_utils
             .format_currency(
                 account.check_balance()
