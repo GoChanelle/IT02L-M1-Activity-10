@@ -211,13 +211,13 @@ else:
         f"**{account.account_name}**"
     )
 
-    st.sidebar.badge(
-        account.get_account_type(), color="violet"
-    )
-
     st.sidebar.write(
         f"Account: "
         f"{account.account_number}"
+    )
+
+    st.sidebar.badge(
+        account.get_account_type(), color="violet"
     )
 
     st.sidebar.divider()
