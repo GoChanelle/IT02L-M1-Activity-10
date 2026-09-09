@@ -279,15 +279,15 @@ else:
             )
         )
 
-
+        col2.badge("Account", color="red")
         col2.metric(
-            "Account Type",
+            "・・・・・",
             account.get_account_type()
         )
 
-
+        col3.badge("Account Number", color="red")
         col3.metric(
-            "Account Number",
+            "・・・・・",
             account.account_number
         )
 
