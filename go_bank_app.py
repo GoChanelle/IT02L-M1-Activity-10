@@ -294,9 +294,8 @@ else:
         st.divider()
 
 
-        st.info(
-            "Select a banking service from "
-            "the menu on the left."
+        st.caption(
+            "Select a banking service from the menu on the left."
         )
 
 
