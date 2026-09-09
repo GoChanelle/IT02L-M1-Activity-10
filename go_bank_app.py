@@ -568,7 +568,7 @@ else:
         # ==================================
 
         st.header(
-            "1. Transaction Summary"
+            "Transaction Summary"
         )
 
         col1, col2, col3 = st.columns(3, border=True)
@@ -607,10 +607,10 @@ else:
         # ==================================
 
         st.header(
-            "2. Money Flow Analysis"
+            "Money Flow Analysis"
         )
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3 = st.columns(3, border=True)
 
 
         col1.metric(
@@ -655,10 +655,10 @@ else:
         # ==================================
 
         st.header(
-            "3. Account Activity Analysis"
+            "Account Activity Analysis"
         )
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3 = st.columns(3, border=True)
 
 
         col1.metric(
