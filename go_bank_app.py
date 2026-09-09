@@ -270,7 +270,7 @@ else:
         col1, col2, col3 = st.columns(3, border=True)
 
 
-        col1.markdown(
+        col1.metric(
             "Current Balance",
             go_bank_utils
             .format_currency(
@@ -279,13 +279,13 @@ else:
         )
 
 
-        col2.markdown(
+        col2.metric(
             "Account Type",
             account.get_account_type()
         )
 
 
-        col3.markdown(
+        col3.metric(
             "Account Number",
             account.account_number
         )
