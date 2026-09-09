@@ -36,11 +36,13 @@ if "account" not in st.session_state:
 # BANK HEADER
 # ==========================================
 
-st.title("go BANK")
+st.title("𖥻 ׁ ׅ  CHANCE BANK ᯓ★")
 
 st.caption(
-    "Secure Digital Banking System"
+    "Secure Digital Banking System ⸝⸝"
 )
+
+st.divider()
 
 
 # ==========================================
