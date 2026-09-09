@@ -37,6 +37,9 @@ def register_account(
     if account_number == "":
         return None, "Please enter an account number."
 
+    if not account_number.isdigit():
+        return None, "Account number must contain only numbers."
+
     if go_bank_storage.account_exists(
         account_number
     ):
