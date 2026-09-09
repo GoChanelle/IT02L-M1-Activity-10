@@ -223,15 +223,19 @@ else:
     st.sidebar.divider()
 
 
-    menu = st.sidebar.segmented_control(
-        "BANKING MENU",
-        ["Dashboard", 
-         "Deposit", 
-         "Withdraw", 
-         "Transaction History", 
-         "Transaction Analysis"],
-        default="Dashboard"
-    )
+    if "menu" not in st.session_state:
+        st.session_state.menu = "Dashboard"
+
+    st.sidebar.title("BANKING MENU")
+
+    options = ["Dashboard", "Deposit", "Withdraw", "Transaction History", "Transaction Analysis"]
+
+    for option in options:
+        button_type = "primary" if st.session_state.menu == option else "secondary"
+        if st.sidebar.button(option, use_container_width=True, type=button_type):
+            st.session_state.menu = option
+
+    menu = st.session_state.menu
 
 
     st.sidebar.divider()
