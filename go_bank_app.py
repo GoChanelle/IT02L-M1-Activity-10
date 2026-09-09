@@ -327,7 +327,7 @@ else:
 
         st.badge(
             f"Current Balance: "
-            f"**{go_bank_utils.format_currency(account.check_balance())}**"
+            f"**{go_bank_utils.format_currency(account.check_balance())}**", color="red"
         )
 
         amount = st.number_input(
