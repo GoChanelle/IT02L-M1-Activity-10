@@ -612,9 +612,9 @@ else:
 
         col1, col2, col3 = st.columns(3, border=True)
 
-
+        col1.badge("Total Deposited",color="red")
         col1.metric(
-            "Total Deposited",
+            "・・・・・",
             go_bank_utils
             .format_currency(
                 result[
@@ -623,9 +623,9 @@ else:
             )
         )
 
-
+        col2.badge("Total Withdrawn",color="red")
         col2.metric(
-            "Total Withdrawn",
+            "・・・・・",
             go_bank_utils
             .format_currency(
                 result[
@@ -634,9 +634,9 @@ else:
             )
         )
 
-
+        col3.badge("Net Cash Flow",color="red")
         col3.metric(
-            "Net Cash Flow",
+            "・・・・・",
             go_bank_utils
             .format_currency(
                 result[
