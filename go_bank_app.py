@@ -393,9 +393,11 @@ else:
             ":red[Withdraw Money]"
         )
 
-        st.write(
+        st.divider()
+
+        st.badge(
             f"Available Balance: "
-            f"**{go_bank_utils.format_currency(account.check_balance())}**"
+            f"**{go_bank_utils.format_currency(account.check_balance())}**", color="red"
         )
 
         amount = st.number_input(
