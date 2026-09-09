@@ -573,25 +573,25 @@ else:
 
         col1, col2, col3 = st.columns(3, border=True)
 
-
+        col1.badge("Total Transactions",color="red")
         col1.metric(
-            "Total Transactions",
+            "・・・・・",
             result[
                 "total_transactions"
             ]
         )
 
-
+        col2.badge("Deposits",color="red")
         col2.metric(
-            "Deposits",
+            "・・・・・",
             result[
                 "deposits"
             ]
         )
 
-
+        col3.badge("Withdrawals",color="red")
         col3.metric(
-            "Withdrawals",
+            "・・・・・",
             result[
                 "withdrawals"
             ]
