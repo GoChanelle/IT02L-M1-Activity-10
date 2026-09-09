@@ -259,8 +259,8 @@ else:
 
     if menu == "Dashboard":
 
-        st.info(
-            f"Welcome, {account.account_name}"
+        st.subheader(
+            f"𓄲  𓏼{account.account_name} !"
         )
 
         st.subheader(
