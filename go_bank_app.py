@@ -12,7 +12,7 @@ import go_bank_utils
 # ==========================================
 
 st.set_page_config(
-    page_title="go Bank",
+    page_title="CHANCE'S Bank",
     page_icon="🏦",
     layout="wide"
 )
