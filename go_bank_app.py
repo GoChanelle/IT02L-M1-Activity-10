@@ -204,7 +204,7 @@ else:
     # ======================================
 
     st.sidebar.title(
-        "go BANK"
+        "𖥻 ׁ ׅ CHANCE BANK"
     )
 
     st.sidebar.write(
@@ -212,7 +212,7 @@ else:
     )
 
     st.sidebar.caption(
-        account.get_account_type()
+        st.badge(account.get_account_type())
     )
 
     st.sidebar.write(
