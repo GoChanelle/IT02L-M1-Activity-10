@@ -224,7 +224,7 @@ else:
 
 
     menu = st.sidebar.segmented_control(
-        st.badge("BANKING MENU"),
+        "BANKING MENU",
         ["Dashboard", "Deposit", "Withdraw", "Transaction History", "Transaction Analysis"],
         default="Dashboard"
     )
