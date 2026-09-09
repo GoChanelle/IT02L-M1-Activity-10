@@ -264,7 +264,7 @@ else:
         )
 
         st.subheader(
-            "Account Overview"
+            ":red[Account Overview]"
         )
 
         col1, col2, col3 = st.columns(3, border=True)
