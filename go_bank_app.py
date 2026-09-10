@@ -449,7 +449,7 @@ else:
                     )
  
                     st.success(
-                        "Savings goal set."
+                        "Savings goal set .ᐟ"
                     )
  
                     st.rerun()

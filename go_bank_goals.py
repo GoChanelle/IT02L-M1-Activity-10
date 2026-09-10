@@ -80,8 +80,8 @@ class GeneralSavingsGoal(SavingsGoal):
     def get_congratulation_message(self):
  
         return (
-            f"🎉 Congratulations! You've reached your "
-            f"\"{self._name}\" savings goal!"
+            f"Congratulations .ᐟ You've reached your "
+            f"\"{self._name}\" savings goal .ᐟ"
         )
  
  
@@ -97,6 +97,6 @@ class EmergencyFundGoal(SavingsGoal):
     def get_congratulation_message(self):
  
         return (
-            f"🛡️ Well done! Your emergency fund "
+            f"🛡️ Well done .ᐟ Your emergency fund "
             f"\"{self._name}\" is now fully funded."
         )
