@@ -97,6 +97,6 @@ class EmergencyFundGoal(SavingsGoal):
     def get_congratulation_message(self):
  
         return (
-            f"🛡️ Well done .ᐟ Your emergency fund "
+            f"Well done .ᐟ Your emergency fund "
             f"\"{self._name}\" is now fully funded."
         )
