@@ -1,10 +1,14 @@
-import streamlit as st
-
 import go_bank_auth
 import go_bank_storage
 import go_bank_transactions
 import go_bank_analysis
 import go_bank_utils
+import go_bank_bills_storage
+
+from go_bank_bills import (
+    UtilityBill,
+    SubscriptionBill
+)
 
 
 # ==========================================
