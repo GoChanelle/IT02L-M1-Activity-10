@@ -253,7 +253,7 @@ else:
 
     st.sidebar.title("BANKING MENU")
 
-    options = ["Dashboard", "Deposit", "Withdraw", "Send Money", "Bills to Pay", "Transaction History", "Transaction Analysis"]
+    options = ["Dashboard", "Deposit", "Withdraw", "Bills to Pay", "Transaction History", "Transaction Analysis"]
 
     for option in options:
         button_type = "primary" if st.session_state.menu == option else "secondary"
