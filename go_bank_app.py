@@ -400,25 +400,6 @@ else:
             f"**{go_bank_utils.format_currency(account.check_balance())}**", color="red"
         )
 
-        # Polymorphic
-        # Account types answers with its own rule (or the base class default)
-        withdrawal_limit = account.get_withdrawal_limit()
-        minimum_balance = account.get_minimum_balance()
- 
-        if withdrawal_limit is not None:
- 
-            st.caption(
-                f"Max per withdrawal: "
-                f"{go_bank_utils.format_currency(withdrawal_limit)}"
-            )
- 
-        if minimum_balance > 0:
- 
-            st.caption(
-                f"Minimum balance required: "
-                f"{go_bank_utils.format_currency(minimum_balance)}"
-            )
-
         amount = st.number_input(
             "Withdrawal Amount",
             min_value=0.0,
