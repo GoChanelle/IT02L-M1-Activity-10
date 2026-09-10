@@ -554,11 +554,6 @@ else:
             f"**{go_bank_utils.format_currency(account.check_balance())}**", color="red"
         )
 
-        # These calls are polymorphic: each account type answers
-        # with its own rule (or the base class default) without
-        # this screen needing to know which subclass it's talking
-        # to. get_effective_withdrawal_limit() also folds in any
-        # personal limit the holder has set below.
         withdrawal_limit = account.get_effective_withdrawal_limit()
         minimum_balance = account.get_minimum_balance()
         custom_limit = account.get_custom_withdrawal_limit()

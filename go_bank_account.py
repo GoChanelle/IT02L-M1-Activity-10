@@ -18,6 +18,8 @@ class BankAccount(ABC):
         self._balance = starting_balance
 
         # Encapsulation
+        # A user-set personal limit, separate from the account
+        # type's built-in rule. None means "no personal limit set".
         self._custom_withdrawal_limit = None
 
     # Encapsulation
@@ -25,6 +27,11 @@ class BankAccount(ABC):
         return self._balance
 
     # Encapsulation
+    # This is the ONLY way outside code (like the storage module)
+    # is allowed to change the balance directly. Before this method
+    # existed, go_bank_storage.py reached into `_balance` directly,
+    # which broke encapsulation because it let another module edit
+    # a "private" attribute without going through any checks.
     def set_balance(self, balance):
 
         if balance < 0:
@@ -35,6 +42,9 @@ class BankAccount(ABC):
         return True
 
     # Encapsulation
+    # Lets the account holder set their own, stricter withdrawal
+    # cap. Passing None clears it. Rejects zero/negative limits so
+    # someone can't accidentally lock themselves out completely.
     def set_withdrawal_limit(self, limit):
 
         if limit is not None and limit <= 0:
@@ -55,6 +65,10 @@ class BankAccount(ABC):
         self._custom_withdrawal_limit = None
 
     # Abstraction
+    # Combines the account type's built-in rule (polymorphic, via
+    # get_withdrawal_limit()) with the holder's own personal limit,
+    # and returns whichever is stricter. withdraw() only ever calls
+    # this — it never has to know both limits exist separately.
     def get_effective_withdrawal_limit(self):
 
         type_limit = self.get_withdrawal_limit()
@@ -83,6 +97,12 @@ class BankAccount(ABC):
             return False
 
         # Abstraction
+        # The base class doesn't know or care WHICH account type
+        # has a withdrawal limit or a minimum balance rule. It just
+        # asks the account for its own rules through these two
+        # methods and enforces whatever comes back. Each subclass
+        # fills in the details on its own (see get_minimum_balance
+        # and get_withdrawal_limit below).
         withdrawal_limit = self.get_effective_withdrawal_limit()
 
         if (
@@ -120,11 +140,15 @@ class BankAccount(ABC):
         pass
 
     # Abstraction
+    # Default policy: no required minimum balance. Subclasses that
+    # need one (like SavingsAccount) override this.
     def get_minimum_balance(self):
 
         return 0
 
     # Abstraction
+    # Default policy: no cap on a single withdrawal. Subclasses
+    # that need one (like StudentAccount) override this.
     def get_withdrawal_limit(self):
 
         return None
@@ -141,6 +165,8 @@ class SavingsAccount(BankAccount):
         return "Savings Account"
 
     # Polymorphism
+    # Overrides the base class's "no minimum" policy. A savings
+    # account can never be withdrawn from below ₱500.
     def get_minimum_balance(self):
 
         return SavingsAccount.MINIMUM_BALANCE
@@ -157,6 +183,8 @@ class StudentAccount(BankAccount):
         return "Student Account"
 
     # Polymorphism
+    # Overrides the base class's "no limit" policy. A student
+    # account can withdraw at most ₱3,000 in a single transaction.
     def get_withdrawal_limit(self):
 
         return StudentAccount.WITHDRAWAL_LIMIT
