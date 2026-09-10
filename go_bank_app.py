@@ -7,12 +7,13 @@ import go_bank_analysis
 import go_bank_utils
 import go_bank_bills_storage
 import go_bank_goals_storage
- 
+import go_bank_transfer
+
 from go_bank_bills import (
     UtilityBill,
     SubscriptionBill
 )
- 
+
 from go_bank_goals import (
     GeneralSavingsGoal,
     EmergencyFundGoal
@@ -253,7 +254,7 @@ else:
 
     st.sidebar.title("BANKING MENU")
 
-    options = ["Dashboard", "Deposit", "Withdraw", "Bills to Pay", "Transaction History", "Transaction Analysis"]
+    options = ["Dashboard", "Deposit", "Withdraw", "Send Money", "Bills to Pay", "Transaction History", "Transaction Analysis"]
 
     for option in options:
         button_type = "primary" if st.session_state.menu == option else "secondary"
@@ -281,20 +282,20 @@ else:
     # ======================================
     # DASHBOARD
     # ======================================
- 
+
     if menu == "Dashboard":
- 
+
         st.subheader(
             f"𓄲 Welcome, {account.account_name} !"
         )
- 
+
         st.header(
             ":red[Account Overview]"
         )
- 
+
         col1, col2, col3 = st.columns(3, border=True)
- 
- 
+
+
         col1.badge("Current Balance", color="red")
         col1.metric(
             "・・・・・",
@@ -303,46 +304,46 @@ else:
                 account.check_balance()
             )
         )
- 
+
         col2.badge("Account", color="red")
         col2.metric(
             "・・・・・",
             account.get_account_type()
         )
- 
+
         col3.badge("Account Number", color="red")
         col3.metric(
             "・・・・・",
             account.account_number
         )
- 
- 
+
+
         st.divider()
- 
- 
+
+
         # ==================================
         # SAVINGS GOAL
         # ==================================
- 
+
         st.header(
             ":red[Savings Goal]"
         )
- 
+
         current_goal = go_bank_goals_storage.get_goal(
             account.account_number
         )
- 
+
         if current_goal is not None:
- 
+
             progress = current_goal.get_progress_percentage(
                 account.check_balance()
             )
- 
+
             st.write(
                 f"**{current_goal.get_name()}** "
                 f"({current_goal.get_goal_type()})"
             )
- 
+
             st.progress(
                 int(progress),
                 text=(
@@ -352,45 +353,48 @@ else:
                     f"({progress:.0f}%)"
                 )
             )
- 
+
             # Abstraction / Polymorphism
+            # is_reached() and get_congratulation_message() are
+            # called without checking which goal subclass this is —
+            # each goal type answers for itself.
             if current_goal.is_reached(
                 account.check_balance()
             ):
- 
+
                 st.success(
                     current_goal.get_congratulation_message()
                 )
- 
+
                 st.balloons()
- 
+
             if st.button(
                 "Clear Goal",
                 key="clear_goal"
             ):
- 
+
                 go_bank_goals_storage.clear_goal(
                     account.account_number
                 )
- 
+
                 st.rerun()
- 
+
         else:
- 
+
             st.caption(
                 "You haven't set a savings goal yet."
             )
- 
- 
+
+
         with st.expander(
             "Set a New Savings Goal"
         ):
- 
+
             goal_name = st.text_input(
                 "What are you saving for?",
                 key="goal_name"
             )
- 
+
             goal_amount = st.number_input(
                 "Target Amount",
                 min_value=0.0,
@@ -398,7 +402,7 @@ else:
                 format="%.2f",
                 key="goal_amount"
             )
- 
+
             goal_type = st.selectbox(
                 "Goal Type",
                 [
@@ -407,61 +411,60 @@ else:
                 ],
                 key="goal_type"
             )
- 
+
             if st.button(
                 "Set Goal",
                 use_container_width=True
             ):
- 
+
                 if goal_name.strip() == "":
- 
+
                     st.error(
                         "Please enter what you're saving for."
                     )
- 
+
                 elif not go_bank_utils.is_valid_amount(
                     goal_amount
                 ):
- 
+
                     st.error(
                         "Please enter a valid target amount."
                     )
- 
+
                 else:
- 
+
                     if goal_type == "Emergency Fund Goal":
- 
+
                         new_goal = EmergencyFundGoal(
                             goal_name.strip(),
                             goal_amount
                         )
- 
+
                     else:
- 
+
                         new_goal = GeneralSavingsGoal(
                             goal_name.strip(),
                             goal_amount
                         )
- 
+
                     go_bank_goals_storage.save_goal(
                         account.account_number,
                         new_goal
                     )
- 
+
                     st.success(
-                        "Savings goal set .ᐟ"
+                        "Savings goal set."
                     )
- 
+
                     st.rerun()
- 
- 
+
+
         st.divider()
- 
- 
+
+
         st.caption(
             "Select a banking service from the menu on the left."
         )
-
 
 
     # ======================================
@@ -551,6 +554,106 @@ else:
             f"**{go_bank_utils.format_currency(account.check_balance())}**", color="red"
         )
 
+        # These calls are polymorphic: each account type answers
+        # with its own rule (or the base class default) without
+        # this screen needing to know which subclass it's talking
+        # to. get_effective_withdrawal_limit() also folds in any
+        # personal limit the holder has set below.
+        withdrawal_limit = account.get_effective_withdrawal_limit()
+        minimum_balance = account.get_minimum_balance()
+        custom_limit = account.get_custom_withdrawal_limit()
+
+        if withdrawal_limit is not None:
+
+            st.caption(
+                f"Max per withdrawal: "
+                f"{go_bank_utils.format_currency(withdrawal_limit)}"
+            )
+
+        if minimum_balance > 0:
+
+            st.caption(
+                f"Minimum balance required: "
+                f"{go_bank_utils.format_currency(minimum_balance)}"
+            )
+
+
+        with st.expander(
+            "Manage Withdrawal Limit"
+        ):
+
+            if custom_limit is not None:
+
+                st.write(
+                    f"Your personal limit is currently "
+                    f"**{go_bank_utils.format_currency(custom_limit)}** "
+                    f"per withdrawal."
+                )
+
+                if st.button(
+                    "Remove Personal Limit",
+                    key="clear_withdrawal_limit"
+                ):
+
+                    account.clear_withdrawal_limit()
+
+                    go_bank_storage.update_account(
+                        account
+                    )
+
+                    st.success(
+                        "Personal withdrawal limit removed."
+                    )
+
+                    st.rerun()
+
+            else:
+
+                st.caption(
+                    "You haven't set a personal withdrawal "
+                    "limit yet."
+                )
+
+            new_limit = st.number_input(
+                "Set a Personal Withdrawal Limit",
+                min_value=0.0,
+                step=100.0,
+                format="%.2f",
+                key="new_withdrawal_limit"
+            )
+
+            if st.button(
+                "Save Limit",
+                key="save_withdrawal_limit"
+            ):
+
+                # Encapsulation
+                # set_withdrawal_limit() rejects zero/negative
+                # values on its own — the UI doesn't duplicate
+                # that validation here.
+                saved = account.set_withdrawal_limit(
+                    new_limit
+                )
+
+                if not saved:
+
+                    st.error(
+                        "Please enter an amount greater than zero."
+                    )
+
+                else:
+
+                    go_bank_storage.update_account(
+                        account
+                    )
+
+                    st.success(
+                        "Personal withdrawal limit saved."
+                    )
+
+                    st.rerun()
+
+
         amount = st.number_input(
             "Withdrawal Amount",
             min_value=0.0,
@@ -576,6 +679,29 @@ else:
 
                 st.error(
                     "Insufficient balance .ᐟ"
+                )
+
+            elif (
+                withdrawal_limit is not None
+                and
+                amount > withdrawal_limit
+            ):
+
+                st.error(
+                    f"This account can withdraw at most "
+                    f"{go_bank_utils.format_currency(withdrawal_limit)} "
+                    f"per transaction .ᐟ"
+                )
+
+            elif (
+                account.check_balance() - amount
+                < minimum_balance
+            ):
+
+                st.error(
+                    f"Savings accounts must keep at least "
+                    f"{go_bank_utils.format_currency(minimum_balance)} "
+                    f"in the account .ᐟ"
                 )
 
             else:
@@ -608,37 +734,116 @@ else:
                             account.check_balance()
                         )
                     )
+
+
     # ======================================
-    # BILLS TO PAY
+    # SEND MONEY
     # ======================================
- 
-    elif menu == "Bills to Pay":
- 
+
+    elif menu == "Send Money":
+
         st.header(
-            ":red[Bills to Pay]"
+            ":red[Send Money]"
         )
- 
+
         st.divider()
- 
+
         st.badge(
             f"Available Balance: "
             f"**{go_bank_utils.format_currency(account.check_balance())}**", color="red"
         )
- 
- 
+
+        recipient_number = st.text_input(
+            "Recipient Account Number",
+            key="recipient_number"
+        )
+
+        transfer_amount = st.number_input(
+            "Amount to Send",
+            min_value=0.0,
+            step=100.0,
+            format="%.2f",
+            key="transfer_amount"
+        )
+
+        if (
+            recipient_number.strip() != ""
+            and
+            recipient_number.strip()
+            != account.account_number
+        ):
+
+            recipient_preview = go_bank_storage.find_account(
+                recipient_number.strip()
+            )
+
+            if recipient_preview is not None:
+
+                st.caption(
+                    f"Sending to: **{recipient_preview.account_name}** "
+                    f"({recipient_preview.get_account_type()})"
+                )
+
+            else:
+
+                st.caption(
+                    "No account found with that number yet."
+                )
+
+
+        if st.button(
+            "Confirm Transfer",
+            use_container_width=True
+        ):
+
+            success, message = go_bank_transfer.transfer_funds(
+                account,
+                recipient_number,
+                transfer_amount
+            )
+
+            if success:
+
+                st.success(message)
+
+                st.rerun()
+
+            else:
+
+                st.error(message)
+
+
+    # ======================================
+    # BILLS TO PAY
+    # ======================================
+
+    elif menu == "Bills to Pay":
+
+        st.header(
+            ":red[Bills to Pay]"
+        )
+
+        st.divider()
+
+        st.badge(
+            f"Available Balance: "
+            f"**{go_bank_utils.format_currency(account.check_balance())}**", color="red"
+        )
+
+
         # ==================================
         # ADD A NEW BILL
         # ==================================
- 
+
         st.subheader(
             "Add a Bill"
         )
- 
+
         bill_name = st.text_input(
             "What are you paying for?",
             key="bill_name"
         )
- 
+
         bill_amount = st.number_input(
             "Amount Due",
             min_value=0.0,
@@ -646,7 +851,7 @@ else:
             format="%.2f",
             key="bill_amount"
         )
- 
+
         bill_type = st.selectbox(
             "Bill Type",
             [
@@ -655,105 +860,105 @@ else:
             ],
             key="bill_type"
         )
- 
+
         if st.button(
             "Add to List",
             use_container_width=True
         ):
- 
+
             if bill_name.strip() == "":
- 
+
                 st.error(
                     "Please enter what this bill is for."
                 )
- 
+
             elif not go_bank_utils.is_valid_amount(
                 bill_amount
             ):
- 
+
                 st.error(
                     "Please enter a valid amount."
                 )
- 
+
             else:
- 
+
                 if bill_type == "Subscription Bill":
- 
+
                     new_bill = SubscriptionBill(
                         bill_name.strip(),
                         bill_amount
                     )
- 
+
                 else:
- 
+
                     new_bill = UtilityBill(
                         bill_name.strip(),
                         bill_amount
                     )
- 
+
                 go_bank_bills_storage.add_bill(
                     account.account_number,
                     new_bill
                 )
- 
+
                 st.success(
                     f"Added \"{bill_name.strip()}\" to your bills."
                 )
- 
+
                 st.rerun()
- 
- 
+
+
         st.divider()
- 
- 
+
+
         # ==================================
         # LIST OF UNPAID BILLS
         # ==================================
- 
+
         st.subheader(
             "Pending Bills"
         )
- 
+
         bills = go_bank_bills_storage.get_bills(
             account.account_number
         )
- 
+
         unpaid_bills = [
             bill
             for bill in bills
             if not bill.is_paid()
         ]
- 
+
         if not unpaid_bills:
- 
-            st.caption(
+
+            st.info(
                 "You have no pending bills."
             )
- 
+
         else:
- 
+
             for bill in unpaid_bills:
- 
+
                 col1, col2, col3, col4 = st.columns(
                     [3, 2, 2, 2],
                     border=True
                 )
- 
+
                 col1.write(
                     f"**{bill.get_name()}**"
                 )
- 
+
                 col1.caption(
                     bill.get_bill_type()
                 )
- 
+
                 col2.metric(
                     "Amount",
                     go_bank_utils.format_currency(
                         bill.get_amount()
                     )
                 )
- 
+
                 # Polymorphism
                 # get_total_due() calls the bill's own
                 # get_processing_fee() under the hood, so this
@@ -764,58 +969,59 @@ else:
                         bill.get_total_due()
                     )
                 )
- 
+
                 if col4.button(
                     "Pay",
                     key=f"pay_{bill.get_name()}",
                     use_container_width=True
                 ):
- 
+
                     total_due = bill.get_total_due()
- 
+
                     if total_due > account.check_balance():
- 
+
                         st.error(
                             "Insufficient balance to pay this bill."
                         )
- 
+
                     else:
- 
+
                         success = account.withdraw(
                             total_due
                         )
- 
+
                         if success:
- 
+
                             with st.spinner(text="Processing payment...", show_time=False, width="content"):
- 
+
                                 go_bank_storage.update_account(
                                     account
                                 )
- 
+
                                 go_bank_bills_storage.mark_bill_paid(
                                     account.account_number,
                                     bill.get_name()
                                 )
- 
+
                                 go_bank_transactions.record_transaction(
                                     account,
                                     f"Bill Payment: {bill.get_name()}",
                                     total_due
                                 )
- 
+
                             st.success(
                                 f"Paid {bill.get_name()} successfully."
                             )
- 
+
                             st.rerun()
- 
+
                         else:
- 
+
                             st.error(
                                 "Payment failed. Check your account "
                                 "limits or balance."
                             )
+
 
     # ======================================
     # TRANSACTION HISTORY

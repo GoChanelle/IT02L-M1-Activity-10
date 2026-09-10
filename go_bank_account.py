@@ -17,9 +17,56 @@ class BankAccount(ABC):
         self._pin = pin
         self._balance = starting_balance
 
+        # Encapsulation
+        self._custom_withdrawal_limit = None
+
     # Encapsulation
     def check_balance(self):
         return self._balance
+
+    # Encapsulation
+    def set_balance(self, balance):
+
+        if balance < 0:
+            return False
+
+        self._balance = balance
+
+        return True
+
+    # Encapsulation
+    def set_withdrawal_limit(self, limit):
+
+        if limit is not None and limit <= 0:
+            return False
+
+        self._custom_withdrawal_limit = limit
+
+        return True
+
+    # Encapsulation
+    def get_custom_withdrawal_limit(self):
+
+        return self._custom_withdrawal_limit
+
+    # Encapsulation
+    def clear_withdrawal_limit(self):
+
+        self._custom_withdrawal_limit = None
+
+    # Abstraction
+    def get_effective_withdrawal_limit(self):
+
+        type_limit = self.get_withdrawal_limit()
+        custom_limit = self._custom_withdrawal_limit
+
+        if type_limit is None:
+            return custom_limit
+
+        if custom_limit is None:
+            return type_limit
+
+        return min(type_limit, custom_limit)
 
     def deposit(self, amount):
 
@@ -35,10 +82,25 @@ class BankAccount(ABC):
         if amount <= 0:
             return False
 
+        # Abstraction
+        withdrawal_limit = self.get_effective_withdrawal_limit()
+
+        if (
+            withdrawal_limit is not None
+            and
+            amount > withdrawal_limit
+        ):
+            return False
+
         if amount > self._balance:
             return False
 
-        self._balance -= amount
+        remaining_balance = self._balance - amount
+
+        if remaining_balance < self.get_minimum_balance():
+            return False
+
+        self._balance = remaining_balance
 
         return True
 
@@ -57,34 +119,44 @@ class BankAccount(ABC):
     def get_account_type(self):
         pass
 
+    # Abstraction
+    def get_minimum_balance(self):
+
+        return 0
+
+    # Abstraction
+    def get_withdrawal_limit(self):
+
+        return None
+
 
 # Inheritance
 class SavingsAccount(BankAccount):
+
+    MINIMUM_BALANCE = 500.00
 
     # Polymorphism
     def get_account_type(self):
 
         return "Savings Account"
 
+    # Polymorphism
+    def get_minimum_balance(self):
+
+        return SavingsAccount.MINIMUM_BALANCE
+
 
 # Inheritance
 class StudentAccount(BankAccount):
+
+    WITHDRAWAL_LIMIT = 3000.00
 
     # Polymorphism
     def get_account_type(self):
 
         return "Student Account"
 
-""" 
-######### Learning Signature ######### 
-Programmed by: Chanelle Go
-Date Submitted: September 10, 2026
- 
-Program Description: This program is a slightly modified version of the existing ATM file with an updated GUI and account handling.
-Reflection: I learned how to read through Encapsulation, Abstraction, Inheritance, and Polymorphism codes and utilize them.
- 
-AI Usage
-[/] No AI Assistance – Completed independently without AI.
-[ ] AI as Support Tool – Used AI for explanations, syntax, or minor corrections.
-[ ] AI as Collaborative Partner – Used AI to design, structure, or co-create significant code.
-"""
+    # Polymorphism
+    def get_withdrawal_limit(self):
+
+        return StudentAccount.WITHDRAWAL_LIMIT
