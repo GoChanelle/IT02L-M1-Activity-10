@@ -581,7 +581,7 @@ else:
  
         if not unpaid_bills:
  
-            st.info(
+            st.caption(
                 "You have no pending bills."
             )
  
