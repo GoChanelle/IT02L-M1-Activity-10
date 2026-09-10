@@ -7,7 +7,6 @@ import go_bank_analysis
 import go_bank_utils
 import go_bank_bills_storage
 import go_bank_goals_storage
-import go_bank_transfer
 
 from go_bank_bills import (
     UtilityBill,
@@ -355,9 +354,6 @@ else:
             )
 
             # Abstraction / Polymorphism
-            # is_reached() and get_congratulation_message() are
-            # called without checking which goal subclass this is —
-            # each goal type answers for itself.
             if current_goal.is_reached(
                 account.check_balance()
             ):
@@ -729,84 +725,6 @@ else:
                             account.check_balance()
                         )
                     )
-
-
-    # ======================================
-    # SEND MONEY
-    # ======================================
-
-    elif menu == "Send Money":
-
-        st.header(
-            ":red[Send Money]"
-        )
-
-        st.divider()
-
-        st.badge(
-            f"Available Balance: "
-            f"**{go_bank_utils.format_currency(account.check_balance())}**", color="red"
-        )
-
-        recipient_number = st.text_input(
-            "Recipient Account Number",
-            key="recipient_number"
-        )
-
-        transfer_amount = st.number_input(
-            "Amount to Send",
-            min_value=0.0,
-            step=100.0,
-            format="%.2f",
-            key="transfer_amount"
-        )
-
-        if (
-            recipient_number.strip() != ""
-            and
-            recipient_number.strip()
-            != account.account_number
-        ):
-
-            recipient_preview = go_bank_storage.find_account(
-                recipient_number.strip()
-            )
-
-            if recipient_preview is not None:
-
-                st.caption(
-                    f"Sending to: **{recipient_preview.account_name}** "
-                    f"({recipient_preview.get_account_type()})"
-                )
-
-            else:
-
-                st.caption(
-                    "No account found with that number yet."
-                )
-
-
-        if st.button(
-            "Confirm Transfer",
-            use_container_width=True
-        ):
-
-            success, message = go_bank_transfer.transfer_funds(
-                account,
-                recipient_number,
-                transfer_amount
-            )
-
-            if success:
-
-                st.success(message)
-
-                st.rerun()
-
-            else:
-
-                st.error(message)
-
 
     # ======================================
     # BILLS TO PAY
