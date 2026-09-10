@@ -77,8 +77,8 @@ class StudentAccount(BankAccount):
 
 """ 
 ######### Learning Signature ######### 
-Programmed by: Clyde Balaman
-Date Submitted: September 4, 2026
+Programmed by: Chanelle Go
+Date Submitted: September 10, 2026
  
 Program Description: This program is a slightly modified version of the existing ATM file with an updated GUI and account handling.
 Reflection: I learned how to read through Encapsulation, Abstraction, Inheritance, and Polymorphism codes and utilize them.
