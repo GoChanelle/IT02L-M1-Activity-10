@@ -48,10 +48,6 @@ class Bill(ABC):
         return 0.0
  
     # Abstraction
-    # The actual amount that gets withdrawn when this bill is paid.
-    # Calling code (the Bills screen) only ever calls this — it
-    # never needs to know whether a particular bill type charges a
-    # fee or not, because get_processing_fee() is polymorphic.
     def get_total_due(self):
  
         return (
