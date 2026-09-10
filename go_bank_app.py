@@ -278,7 +278,7 @@ else:
         st.rerun()
 
 
-        # ======================================
+    # ======================================
     # DASHBOARD
     # ======================================
  
@@ -354,9 +354,6 @@ else:
             )
  
             # Abstraction / Polymorphism
-            # is_reached() and get_congratulation_message() are
-            # called without checking which goal subclass this is —
-            # each goal type answers for itself.
             if current_goal.is_reached(
                 account.check_balance()
             ):
