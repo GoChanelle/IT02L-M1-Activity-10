@@ -5,8 +5,11 @@
 Programmed by: Chanelle Go
 Date Submitted: September 10, 2026
  
-Program Description: This program updates the overall look of the GUI and enhances readability.
-Reflection: I learned how to use Streamlit concepts and elements to personalize an app.
+Program Description: 
+This program adds a "Bills to Pay" tab where the user can add what they need to pay for and pay it directly from the app.
+It also includes a "Savings Goal" where the user can input an amount goal and be congratulated when it reaches said amount.
+
+Reflection: I learned
  
 AI Usage
 [/] No AI Assistance – Completed independently without AI.
