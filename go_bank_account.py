@@ -74,3 +74,17 @@ class StudentAccount(BankAccount):
     def get_account_type(self):
 
         return "Student Account"
+
+""" 
+######### Learning Signature ######### 
+Programmed by: Clyde Balaman
+Date Submitted: September 4, 2026
+ 
+Program Description: This program is a slightly modified version of the existing ATM file with an updated GUI and account handling.
+Reflection: I learned how to read through Encapsulation, Abstraction, Inheritance, and Polymorphism codes and utilize them.
+ 
+AI Usage
+[/] No AI Assistance – Completed independently without AI.
+[ ] AI as Support Tool – Used AI for explanations, syntax, or minor corrections.
+[ ] AI as Collaborative Partner – Used AI to design, structure, or co-create significant code.
+"""
