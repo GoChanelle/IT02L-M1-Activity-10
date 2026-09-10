@@ -241,7 +241,7 @@ else:
 
     st.sidebar.title("BANKING MENU")
 
-    options = ["Dashboard", "Deposit", "Withdraw", "Transaction History", "Transaction Analysis"]
+    options = ["Dashboard", "Deposit", "Withdraw", "Bills to Pay", "Transaction History", "Transaction Analysis"]
 
     for option in options:
         button_type = "primary" if st.session_state.menu == option else "secondary"
@@ -457,7 +457,214 @@ else:
                             account.check_balance()
                         )
                     )
-
+    # ======================================
+    # BILLS TO PAY
+    # ======================================
+ 
+    elif menu == "Bills to Pay":
+ 
+        st.header(
+            ":red[Bills to Pay]"
+        )
+ 
+        st.divider()
+ 
+        st.badge(
+            f"Available Balance: "
+            f"**{go_bank_utils.format_currency(account.check_balance())}**", color="red"
+        )
+ 
+ 
+        # ==================================
+        # ADD A NEW BILL
+        # ==================================
+ 
+        st.subheader(
+            "Add a Bill"
+        )
+ 
+        bill_name = st.text_input(
+            "What are you paying for?",
+            key="bill_name"
+        )
+ 
+        bill_amount = st.number_input(
+            "Amount Due",
+            min_value=0.0,
+            step=50.0,
+            format="%.2f",
+            key="bill_amount"
+        )
+ 
+        bill_type = st.selectbox(
+            "Bill Type",
+            [
+                "Utility Bill",
+                "Subscription Bill"
+            ],
+            key="bill_type"
+        )
+ 
+        if st.button(
+            "Add to List",
+            use_container_width=True
+        ):
+ 
+            if bill_name.strip() == "":
+ 
+                st.error(
+                    "Please enter what this bill is for."
+                )
+ 
+            elif not go_bank_utils.is_valid_amount(
+                bill_amount
+            ):
+ 
+                st.error(
+                    "Please enter a valid amount."
+                )
+ 
+            else:
+ 
+                if bill_type == "Subscription Bill":
+ 
+                    new_bill = SubscriptionBill(
+                        bill_name.strip(),
+                        bill_amount
+                    )
+ 
+                else:
+ 
+                    new_bill = UtilityBill(
+                        bill_name.strip(),
+                        bill_amount
+                    )
+ 
+                go_bank_bills_storage.add_bill(
+                    account.account_number,
+                    new_bill
+                )
+ 
+                st.success(
+                    f"Added \"{bill_name.strip()}\" to your bills."
+                )
+ 
+                st.rerun()
+ 
+ 
+        st.divider()
+ 
+ 
+        # ==================================
+        # LIST OF UNPAID BILLS
+        # ==================================
+ 
+        st.subheader(
+            "Pending Bills"
+        )
+ 
+        bills = go_bank_bills_storage.get_bills(
+            account.account_number
+        )
+ 
+        unpaid_bills = [
+            bill
+            for bill in bills
+            if not bill.is_paid()
+        ]
+ 
+        if not unpaid_bills:
+ 
+            st.info(
+                "You have no pending bills."
+            )
+ 
+        else:
+ 
+            for bill in unpaid_bills:
+ 
+                col1, col2, col3, col4 = st.columns(
+                    [3, 2, 2, 2],
+                    border=True
+                )
+ 
+                col1.write(
+                    f"**{bill.get_name()}**"
+                )
+ 
+                col1.caption(
+                    bill.get_bill_type()
+                )
+ 
+                col2.metric(
+                    "Amount",
+                    go_bank_utils.format_currency(
+                        bill.get_amount()
+                    )
+                )
+ 
+                # Polymorphism
+                # get_total_due() calls the bill's own
+                # get_processing_fee() under the hood, so this
+                # screen doesn't need an if/else for bill type.
+                col3.metric(
+                    "Total Due",
+                    go_bank_utils.format_currency(
+                        bill.get_total_due()
+                    )
+                )
+ 
+                if col4.button(
+                    "Pay",
+                    key=f"pay_{bill.get_name()}",
+                    use_container_width=True
+                ):
+ 
+                    total_due = bill.get_total_due()
+ 
+                    if total_due > account.check_balance():
+ 
+                        st.error(
+                            "Insufficient balance to pay this bill."
+                        )
+ 
+                    else:
+ 
+                        success = account.withdraw(
+                            total_due
+                        )
+ 
+                        if success:
+ 
+                            with st.spinner(text="Processing payment...", show_time=False, width="content"):
+ 
+                                go_bank_storage.update_account(
+                                    account
+                                )
+ 
+                                go_bank_bills_storage.mark_bill_paid(
+                                    account.account_number,
+                                    bill.get_name()
+                                )
+ 
+                                go_bank_transactions.record_transaction(
+                                    account,
+                                    f"Bill Payment: {bill.get_name()}",
+                                    total_due
+                                )
+ 
+                            st.success(
+                                f"Paid {bill.get_name()} successfully."
+                            )
+ 
+                            st.rerun()
+ 
+                        else:
+ 
+                            st.error(
+                                "Payment failed. Check your account "
+                                "limits or balance."
+                            )
 
     # ======================================
     # TRANSACTION HISTORY
