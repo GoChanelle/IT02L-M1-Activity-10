@@ -276,9 +276,6 @@ def update_account(account):
             ):
 
                 # Encapsulation
-                # Goes through the account's own setter instead of
-                # writing to saved_account._balance directly, so the
-                # account class stays in control of its own data.
                 saved_account.set_balance(
                     account.check_balance()
                 )

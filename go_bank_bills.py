@@ -29,8 +29,6 @@ class Bill(ABC):
         return self._paid
  
     # Encapsulation
-    # The only way outside code can flip a bill to "paid" — nothing
-    # outside this class ever writes to _paid directly.
     def mark_as_paid(self):
  
         self._paid = True
@@ -41,8 +39,6 @@ class Bill(ABC):
         pass
  
     # Abstraction
-    # Default policy: no processing fee. Subclasses that charge one
-    # (like SubscriptionBill) override this.
     def get_processing_fee(self):
  
         return 0.0

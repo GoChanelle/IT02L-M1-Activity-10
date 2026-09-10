@@ -23,8 +23,6 @@ class SavingsGoal(ABC):
         return self._target_amount
  
     # Encapsulation
-    # The only way outside code can change the target — rejects
-    # anything that wouldn't make sense as a goal.
     def set_target_amount(self, target_amount):
  
         if target_amount <= 0:
@@ -35,9 +33,6 @@ class SavingsGoal(ABC):
         return True
  
     # Abstraction
-    # Hides the percentage math from whatever calls it — the
-    # Dashboard just asks "how far along am I?" and gets a number
-    # back, capped at 100 so a progress bar never overflows.
     def get_progress_percentage(self, current_balance):
  
         if self._target_amount <= 0:
@@ -62,7 +57,6 @@ class SavingsGoal(ABC):
         pass
  
     # Abstraction
-    # Each goal type decides how it wants to celebrate.
     @abstractmethod
     def get_congratulation_message(self):
         pass
