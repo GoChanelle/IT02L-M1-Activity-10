@@ -6,10 +6,16 @@ import go_bank_transactions
 import go_bank_analysis
 import go_bank_utils
 import go_bank_bills_storage
-
+import go_bank_goals_storage
+ 
 from go_bank_bills import (
     UtilityBill,
     SubscriptionBill
+)
+ 
+from go_bank_goals import (
+    GeneralSavingsGoal,
+    EmergencyFundGoal
 )
 
 
@@ -272,23 +278,23 @@ else:
         st.rerun()
 
 
-    # ======================================
+        # ======================================
     # DASHBOARD
     # ======================================
-
+ 
     if menu == "Dashboard":
-
+ 
         st.subheader(
             f"𓄲 Welcome, {account.account_name} !"
         )
-
+ 
         st.header(
             ":red[Account Overview]"
         )
-
+ 
         col1, col2, col3 = st.columns(3, border=True)
-
-
+ 
+ 
         col1.badge("Current Balance", color="red")
         col1.metric(
             "・・・・・",
@@ -297,26 +303,168 @@ else:
                 account.check_balance()
             )
         )
-
+ 
         col2.badge("Account", color="red")
         col2.metric(
             "・・・・・",
             account.get_account_type()
         )
-
+ 
         col3.badge("Account Number", color="red")
         col3.metric(
             "・・・・・",
             account.account_number
         )
-
-
+ 
+ 
         st.divider()
-
-
+ 
+ 
+        # ==================================
+        # SAVINGS GOAL
+        # ==================================
+ 
+        st.header(
+            ":red[Savings Goal]"
+        )
+ 
+        current_goal = go_bank_goals_storage.get_goal(
+            account.account_number
+        )
+ 
+        if current_goal is not None:
+ 
+            progress = current_goal.get_progress_percentage(
+                account.check_balance()
+            )
+ 
+            st.write(
+                f"**{current_goal.get_name()}** "
+                f"({current_goal.get_goal_type()})"
+            )
+ 
+            st.progress(
+                int(progress),
+                text=(
+                    f"{go_bank_utils.format_currency(account.check_balance())} "
+                    f"of "
+                    f"{go_bank_utils.format_currency(current_goal.get_target_amount())} "
+                    f"({progress:.0f}%)"
+                )
+            )
+ 
+            # Abstraction / Polymorphism
+            # is_reached() and get_congratulation_message() are
+            # called without checking which goal subclass this is —
+            # each goal type answers for itself.
+            if current_goal.is_reached(
+                account.check_balance()
+            ):
+ 
+                st.success(
+                    current_goal.get_congratulation_message()
+                )
+ 
+                st.balloons()
+ 
+            if st.button(
+                "Clear Goal",
+                key="clear_goal"
+            ):
+ 
+                go_bank_goals_storage.clear_goal(
+                    account.account_number
+                )
+ 
+                st.rerun()
+ 
+        else:
+ 
+            st.caption(
+                "You haven't set a savings goal yet."
+            )
+ 
+ 
+        with st.expander(
+            "Set a New Savings Goal"
+        ):
+ 
+            goal_name = st.text_input(
+                "What are you saving for?",
+                key="goal_name"
+            )
+ 
+            goal_amount = st.number_input(
+                "Target Amount",
+                min_value=0.0,
+                step=500.0,
+                format="%.2f",
+                key="goal_amount"
+            )
+ 
+            goal_type = st.selectbox(
+                "Goal Type",
+                [
+                    "General Savings Goal",
+                    "Emergency Fund Goal"
+                ],
+                key="goal_type"
+            )
+ 
+            if st.button(
+                "Set Goal",
+                use_container_width=True
+            ):
+ 
+                if goal_name.strip() == "":
+ 
+                    st.error(
+                        "Please enter what you're saving for."
+                    )
+ 
+                elif not go_bank_utils.is_valid_amount(
+                    goal_amount
+                ):
+ 
+                    st.error(
+                        "Please enter a valid target amount."
+                    )
+ 
+                else:
+ 
+                    if goal_type == "Emergency Fund Goal":
+ 
+                        new_goal = EmergencyFundGoal(
+                            goal_name.strip(),
+                            goal_amount
+                        )
+ 
+                    else:
+ 
+                        new_goal = GeneralSavingsGoal(
+                            goal_name.strip(),
+                            goal_amount
+                        )
+ 
+                    go_bank_goals_storage.save_goal(
+                        account.account_number,
+                        new_goal
+                    )
+ 
+                    st.success(
+                        "Savings goal set."
+                    )
+ 
+                    st.rerun()
+ 
+ 
+        st.divider()
+ 
+ 
         st.caption(
             "Select a banking service from the menu on the left."
         )
+
 
 
     # ======================================
